@@ -1,0 +1,49 @@
+api:
+  dashboard: true
+  insecure: true
+
+entryPoints:
+  web:
+    address: ":80"
+
+providers:
+  file:
+    filename: /traefik.yml
+    watch: true
+
+http:
+  routers:
+    billing:
+      rule: "PathPrefix(`/billing/`)"
+      service: billing-service
+    iam:
+      rule: "PathPrefix(`/iam/`)"
+      service: iam-service
+    ticket:
+      rule: "PathPrefix(`/ticket/`)"
+      service: ticket-service
+    notification:
+      rule: "PathPrefix(`/notification/`)"
+      service: notification-service
+
+  services:
+    billing-service:
+      loadBalancer:
+        servers:
+          - url: "${BILLING_URL}"
+        passHostHeader: false
+    iam-service:
+      loadBalancer:
+        servers:
+          - url: "${IAM_URL}"
+        passHostHeader: false
+    ticket-service:
+      loadBalancer:
+        servers:
+          - url: "${TICKET_URL}"
+        passHostHeader: false
+    notification-service:
+      loadBalancer:
+        servers:
+          - url: "${NOTIFICATION_URL}"
+        passHostHeader: false

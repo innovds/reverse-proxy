@@ -1,0 +1,25 @@
+services:
+  # Générateur de configuration automatique
+  config-generator:
+    image: python:3.11-alpine
+    volumes:
+      - ./config:/app
+    working_dir: /app
+    env_file:
+      - .env
+      - path: .env.local
+        required: false
+    command: python generate_config.py
+
+  # Traefik proxy
+  traefik:
+    image: traefik:v3.5
+    ports:
+      - "6080:80"
+      - "5080:8080"
+    volumes:
+      - ./config/traefik.yml:/traefik.yml:ro
+    restart: unless-stopped
+    depends_on:
+      config-generator:
+        condition: service_completed_successfully
