@@ -20,6 +20,22 @@ services:
     volumes:
       - ./config/traefik.yml:/traefik.yml:ro
     restart: unless-stopped
+    networks:
+      - local_network
     depends_on:
       config-generator:
         condition: service_completed_successfully
+
+  # cloudflare-tunnel:
+  #   image: cloudflare/cloudflared
+  #   command: tunnel run --config /etc/cloudflared/config.yml
+  #   volumes:
+  #     - ./config/cloudflared.yml:/etc/cloudflared/config.yml:ro
+  #     - ~/.cloudflared:/root/.cloudflared:ro
+  #   restart: unless-stopped
+  #   networks:
+  #     - local_network
+
+networks:
+  local_network:
+    external: true

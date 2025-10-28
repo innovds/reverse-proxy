@@ -22,9 +22,17 @@ http:
     ticket:
       rule: "PathPrefix(`/ticket/`)"
       service: ticket-service
+      # middlewares:
+      #   - ticket-strip-prefix
     notification:
       rule: "PathPrefix(`/notification/`)"
       service: notification-service
+
+  # middlewares:
+  #   ticket-strip-prefix:
+  #     stripPrefix:
+  #       prefixes:
+  #         - "/ticket"
 
   services:
     billing-service:
